@@ -1,31 +1,38 @@
 package com.devflow.portal;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+// 1. Move the class outside and make it public so Thymeleaf can "see" it
+class Employee {
+    public String name = "John Doe";
+    public String initials = "JD";
+    public String role = "Senior DevOps Engineer";
+    public String salary = "$5,500";
+    public String leaveStatus = "No Request";
+    public String salaryStatus = "Pending";
+    public String leaveDates = "N/A";
+    public String leaveReason = "N/A";
+
+    // Standard getters (Thymeleaf needs these to read the variables)
+    public String getName() { return name; }
+    public String getInitials() { return initials; }
+    public String getRole() { return role; }
+    public String getSalary() { return salary; }
+    public String getLeaveStatus() { return leaveStatus; }
+    public String getSalaryStatus() { return salaryStatus; }
+    public String getLeaveDates() { return leaveDates; }
+    public String getLeaveReason() { return leaveReason; }
+}
 
 @Controller
 public class PortalController {
-
-    // Simple Inner Class to hold Employee Data
-    class Employee {
-        String name = "John Doe";
-        String initials = "JD";
-        String role = "Senior DevOps Engineer";
-        String salary = "$5,500";
-        String leaveStatus = "No Request";
-        String salaryStatus = "Pending";
-        String leaveDates = "N/A";
-        String leaveReason = "N/A";
-    }
 
     private Employee emp1 = new Employee();
     private static List<String> logs = new ArrayList<>();
