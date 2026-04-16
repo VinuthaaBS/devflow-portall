@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>DevFlow | Login</title>
+</head>
+<body class="bg-slate-900 flex items-center justify-center h-screen font-mono">
+    <div class="bg-slate-800 p-10 rounded-xl border border-cyan-500 shadow-lg shadow-cyan-500/20 w-96">
+        <h2 class="text-cyan-400 text-3xl font-bold mb-6 text-center italic">DEVFLOW</h2>
+        <form th:action="@{/login}" method="POST" class="space-y-4">
+            <input type="text" name="username" placeholder="Username" class="w-full p-3 bg-slate-700 text-white rounded border border-slate-600 focus:border-cyan-400 outline-none" required>
+            <input type="password" name="password" placeholder="Password" class="w-full p-3 bg-slate-700 text-white rounded border border-slate-600 focus:border-cyan-400 outline-none" required>
+            <button class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded transition shadow-lg shadow-cyan-900/40">LOGIN_SYSTEM</button>
+        </form>
+    </div>
+</body>
+</html>
