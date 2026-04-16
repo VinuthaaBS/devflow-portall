@@ -4,56 +4,76 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>DevFlow | Admin</title>
 </head>
-<body class="bg-slate-900 text-slate-300 font-mono p-10">
+<body class="bg-slate-900 text-slate-300 font-mono p-6">
     <div class="max-w-6xl mx-auto">
-        <div class="grid grid-cols-3 gap-4 mb-8">
-            <div class="bg-slate-800 p-4 rounded border border-slate-700">
-                <p class="text-[9px] text-slate-500 uppercase">Server_Uptime</p>
-                <p class="text-green-500 font-bold" th:text="${uptime}">99.9%</p>
+        <div class="grid grid-cols-4 gap-4 mb-6">
+            <div class="bg-slate-800 p-4 border-l-4 border-green-500 rounded shadow-lg">
+                <p class="text-[9px] text-slate-500 uppercase">System_Status</p>
+                <div class="flex items-center gap-2">
+                    <span class="animate-pulse h-2 w-2 rounded-full bg-green-500"></span>
+                    <p class="text-white font-black text-sm uppercase">Online</p>
+                </div>
             </div>
-            <div class="bg-slate-800 p-4 rounded border border-slate-700">
-                <p class="text-[9px] text-slate-500 uppercase">Database_Link</p>
-                <p class="text-cyan-500 font-bold uppercase italic">Active</p>
+            <div class="bg-slate-800 p-4 border-l-4 border-cyan-500 rounded shadow-lg">
+                <p class="text-[9px] text-slate-500 uppercase">Memory_Usage</p>
+                <p class="text-white font-black text-sm">184.2 MB</p>
             </div>
-            <div class="bg-slate-800 p-4 rounded border border-slate-700">
-                <p class="text-[9px] text-slate-500 uppercase">Last_Deployment</p>
-                <p class="text-white font-bold text-[10px]" th:text="${lastBuild}">N/A</p>
+            <div class="bg-slate-800 p-4 border-l-4 border-yellow-500 rounded shadow-lg">
+                <p class="text-[9px] text-slate-500 uppercase">Container_ID</p>
+                <p class="text-white font-black text-[10px] truncate" th:text="${containerId}">Unknown</p>
+            </div>
+            <div class="bg-slate-800 p-4 border-l-4 border-slate-500 rounded shadow-lg flex items-center justify-center">
+                <a href="/" class="text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-widest underline">Terminate_Session</a>
             </div>
         </div>
 
-        <div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
+        <div class="bg-slate-800 rounded border border-slate-700 overflow-hidden mb-6">
             <table class="w-full text-left">
-                <thead class="bg-slate-900/50 text-slate-500 text-[10px] uppercase">
+                <thead class="bg-slate-900/50 text-[10px] uppercase text-slate-500">
                     <tr>
-                        <th class="p-4">Employee</th>
-                        <th class="p-4">Leave Info</th>
-                        <th class="p-4">Salary</th>
-                        <th class="p-4 text-center">Operations</th>
+                        <th class="p-4">Employee_Registry</th>
+                        <th class="p-4">Leave_Telemetry</th>
+                        <th class="p-4">Finance_Status</th>
+                        <th class="p-4 text-center">Protocol_Execution</th>
                     </tr>
                 </thead>
                 <tbody class="text-sm">
-                    <tr class="border-b border-slate-700 hover:bg-slate-700/20">
+                    <tr class="border-b border-slate-700/50 hover:bg-slate-700/30">
                         <td class="p-4">
-                            <p class="text-white font-bold">John Doe</p>
-                            <p class="text-[9px] text-slate-500 uppercase" th:text="${role}">Role</p>
+                            <div class="flex items-center gap-3">
+                                <div class="h-10 w-10 bg-cyan-900 text-cyan-400 border border-cyan-500/50 flex items-center justify-center font-bold" th:text="${emp.initials}">JD</div>
+                                <div>
+                                    <p class="text-white font-bold" th:text="${emp.name}">Name</p>
+                                    <p class="text-[9px] uppercase text-slate-500" th:text="${emp.role}">Role</p>
+                                </div>
+                            </div>
                         </td>
                         <td class="p-4">
-                            <p class="text-[10px] text-white" th:text="${dates}">No Request</p>
-                            <p class="text-[10px] text-slate-500 italic mb-1" th:text="${reason}">N/A</p>
-                            <span class="text-[9px] font-bold uppercase px-1 rounded bg-slate-900 border border-slate-700" th:text="${leave}">Status</span>
+                            <p class="text-[10px] text-white" th:text="${emp.leaveDates}">N/A</p>
+                            <p class="text-[9px] text-slate-500 italic" th:text="${emp.leaveReason}">N/A</p>
+                            <span class="text-[9px] font-bold uppercase mt-1 inline-block" 
+                                  th:classappend="${emp.leaveStatus == 'Approved' ? 'text-green-500' : (emp.leaveStatus == 'Rejected' ? 'text-red-500' : 'text-yellow-600')}" 
+                                  th:text="${emp.leaveStatus}">Status</span>
                         </td>
                         <td class="p-4">
-                            <p class="text-white font-bold" th:text="${amount}">$0</p>
-                            <p class="text-[10px] uppercase" th:classappend="${salary == 'Paid' ? 'text-green-400' : 'text-red-400'}" th:text="${salary}">Pending</p>
+                            <p class="text-white font-bold" th:text="${emp.salary}">$0</p>
+                            <p class="text-[10px] uppercase font-black" th:classappend="${emp.salaryStatus == 'Paid' ? 'text-green-500' : 'text-red-500'}" th:text="${emp.salaryStatus}">Pending</p>
                         </td>
-                        <td class="p-4 flex gap-2 justify-center mt-2">
-                            <form th:action="@{/approve-leave}" method="POST"><button class="bg-emerald-600 text-white text-[9px] px-2 py-1 rounded font-bold">APPROVE</button></form>
-                            <form th:action="@{/reject-leave}" method="POST"><button class="bg-red-700 text-white text-[9px] px-2 py-1 rounded font-bold">REJECT</button></form>
-                            <form th:action="@{/pay-salary}" method="POST"><button class="bg-cyan-600 text-white text-[9px] px-2 py-1 rounded font-bold">PAY</button></form>
+                        <td class="p-4">
+                            <div class="flex gap-2 justify-center">
+                                <form th:action="@{/approve-leave}" method="POST"><button class="bg-emerald-600 text-white text-[9px] px-3 py-1.5 font-bold uppercase hover:bg-emerald-500 transition">Approve</button></form>
+                                <form th:action="@{/reject-leave}" method="POST"><button class="bg-red-700 text-white text-[9px] px-3 py-1.5 font-bold uppercase hover:bg-red-600 transition">Reject</button></form>
+                                <form th:action="@{/pay-salary}" method="POST"><button class="bg-cyan-600 text-white text-[9px] px-3 py-1.5 font-bold uppercase hover:bg-cyan-500 transition">Pay</button></form>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="bg-black/40 p-4 border border-slate-800 rounded font-mono text-[10px]">
+            <h4 class="text-slate-600 uppercase mb-2 tracking-[0.2em] font-black">Event_Telemetry_Log</h4>
+            <p th:each="log : ${logs}" class="text-slate-400 py-0.5" th:text="${log}"></p>
         </div>
     </div>
 </body>

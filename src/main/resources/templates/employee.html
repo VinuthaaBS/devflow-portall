@@ -2,42 +2,46 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>DevFlow | Employee</title>
+    <title>DevFlow | My Portal</title>
 </head>
-<body class="bg-slate-900 text-slate-300 font-mono p-10">
-    <div class="max-w-2xl mx-auto bg-slate-800 p-8 rounded-xl border border-slate-700 shadow-2xl">
-        <div class="flex justify-between items-center mb-8 border-b border-cyan-900 pb-4">
-            <div>
-                <h1 class="text-cyan-400 text-xl font-bold italic">EMPLOYEE_PORTAL</h1>
-                <p class="text-[10px] text-slate-500 uppercase" th:text="${role}">Loading Role...</p>
-            </div>
-            <a href="/" class="text-[10px] text-slate-500 border border-slate-700 px-2 py-1 rounded">Disconnect</a>
-        </div>
-
-        <div class="bg-slate-900/50 p-6 rounded border border-slate-700 mb-8 flex justify-between items-center">
-            <div>
-                <p class="text-[10px] text-slate-500 uppercase">Monthly_Salary</p>
-                <p class="text-2xl text-white font-bold" th:text="${amount}">$0</p>
-            </div>
-            <div class="text-right">
-                <p class="text-[10px] text-slate-500 uppercase">Payout_Status</p>
-                <p class="font-bold text-xs uppercase" th:classappend="${salary == 'Paid' ? 'text-green-400' : 'text-red-400'}" th:text="${salary}">Pending</p>
-            </div>
-        </div>
-
-        <div class="bg-slate-700/20 p-6 rounded-lg border border-cyan-900/50">
-            <h3 class="text-xs font-bold text-cyan-500 uppercase mb-4 tracking-widest">Leave Request Terminal</h3>
-            <form th:action="@{/apply-leave}" method="POST" class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <input type="date" name="startDate" required class="bg-slate-900 border border-slate-700 p-2 rounded text-xs text-white">
-                    <input type="date" name="endDate" required class="bg-slate-900 border border-slate-700 p-2 rounded text-xs text-white">
+<body class="bg-slate-900 text-slate-300 font-mono p-4">
+    <div class="max-w-xl mx-auto mt-10">
+        <div class="bg-slate-800 rounded-t-xl p-8 border-x border-t border-slate-700 relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4 bg-cyan-500 text-slate-900 text-[10px] font-black rotate-45 translate-x-8 -translate-y-2 w-32 text-center uppercase">Active</div>
+            <div class="flex items-center gap-6">
+                <div class="h-20 w-20 rounded-full bg-cyan-900 border-2 border-cyan-500 flex items-center justify-center text-3xl font-bold text-cyan-400" th:text="${emp.initials}">JD</div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white uppercase tracking-tighter" th:text="${emp.name}">Employee Name</h2>
+                    <p class="text-cyan-500 text-xs font-bold" th:text="${emp.role}">DevOps Specialist</p>
                 </div>
-                <textarea name="reason" placeholder="ENTER REASON FOR LEAVE..." required class="w-full bg-slate-900 border border-slate-700 p-2 rounded text-xs text-white h-20 outline-none focus:border-cyan-500"></textarea>
-                <button type="submit" class="w-full border border-cyan-500 text-cyan-400 font-bold py-3 rounded hover:bg-cyan-500 hover:text-white transition uppercase text-xs">Transmit Request</button>
+            </div>
+        </div>
+
+        <div class="bg-slate-800 border-x border-slate-700 p-8 grid grid-cols-2 gap-4">
+            <div class="bg-slate-900/50 p-4 rounded border border-slate-700">
+                <p class="text-[9px] text-slate-500 uppercase">Current Salary</p>
+                <p class="text-xl font-bold text-white" th:text="${emp.salary}">$0</p>
+                <span class="text-[10px] uppercase font-black" th:classappend="${emp.salaryStatus == 'Paid' ? 'text-green-500' : 'text-red-500'}" th:text="${emp.salaryStatus}">Pending</span>
+            </div>
+            <div class="bg-slate-900/50 p-4 rounded border border-slate-700">
+                <p class="text-[9px] text-slate-500 uppercase">Leave Balance</p>
+                <p class="text-xl font-bold text-white">24 Days</p>
+                <span class="text-[10px] text-cyan-500 uppercase font-black">Annual_Quota</span>
+            </div>
+        </div>
+
+        <div class="bg-slate-800 rounded-b-xl border border-slate-700 p-8 pt-0">
+            <form th:action="@{/apply-leave}" method="POST" class="space-y-4 pt-6 border-t border-slate-700/50">
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="date" name="startDate" required class="bg-slate-900 border border-slate-700 p-2 rounded text-xs text-white outline-none focus:border-cyan-500">
+                    <input type="date" name="endDate" required class="bg-slate-900 border border-slate-700 p-2 rounded text-xs text-white outline-none focus:border-cyan-500">
+                </div>
+                <textarea name="reason" placeholder="REASON FOR LEAVE..." required class="w-full bg-slate-900 border border-slate-700 p-3 rounded text-xs text-white outline-none focus:border-cyan-500 h-24"></textarea>
+                <button class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded transition uppercase text-xs tracking-widest shadow-lg shadow-cyan-900/40">Transmit_Request</button>
             </form>
-            <div class="mt-6 p-4 bg-slate-900 rounded border border-slate-700 text-[10px] space-y-1">
-                <p>LAST_DATES: <span class="text-white" th:text="${dates}">N/A</span></p>
-                <p>STATUS: <span class="font-bold uppercase" th:classappend="${leave == 'Approved' ? 'text-green-400' : (leave == 'Rejected' ? 'text-red-500' : 'text-yellow-500')}" th:text="${leave}">No Request</span></p>
+            <div class="mt-4 p-3 bg-slate-900 rounded border border-slate-700 text-[10px] flex justify-between uppercase">
+                <span>Status: <b class="ml-2" th:classappend="${emp.leaveStatus == 'Approved' ? 'text-green-500' : (emp.leaveStatus == 'Rejected' ? 'text-red-500' : 'text-yellow-500')}" th:text="${emp.leaveStatus}">None</b></span>
+                <span th:text="${emp.leaveDates}">N/A</span>
             </div>
         </div>
     </div>
